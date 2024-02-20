@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """this module defines a class to manage database storage """
-from sqlalchemy import create_engine, sessionmaker, scoped_session
+from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
 from models.base_model import Base
 import os
 from models.state import State
@@ -10,6 +11,8 @@ from models.place import Place
 from models.review import Review
 from models.amenity import Amenity
 
+classes = {"Amenity": Amenity, "City": City,
+           "Place": Place, "Review": Review, "State": State, "User": User}
 
 class DBStorage:
     """this class manage the storage"""
@@ -35,7 +38,6 @@ class DBStorage:
 
     def all(self, cls=None):
         """Return a dictionary of model from database"""
-        classes = [User, Place, State, City, Amenity, Review]
         result_map = {}
         object = []
 
