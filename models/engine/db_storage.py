@@ -14,13 +14,14 @@ from models.amenity import Amenity
 classes = {"Amenity": Amenity, "City": City,
            "Place": Place, "Review": Review, "State": State, "User": User}
 
+
 class DBStorage:
     """this class manage the storage"""
     __engine = None
     __session = None
 
     def __init__(self) -> None:
-
+        """Instantiate a DBStorage object"""
         user = os.getenv('HBNB_MYSQL_USER')
         pwd = os.getenv('HBNB_MYSQL_PWD')
         host = os.getenv('HBNB_MYSQL_HOST')
