@@ -74,7 +74,8 @@ class DBStorage:
         """deletes the passed object from database"""
         if obj is None:
             return None
-        self.__session.delete(obj)
+        self.__session.query(type(obj)).filter(
+                type(obj).id == obj.id).delete()
 
     def reload(self):
         """creat all tables"""
