@@ -18,6 +18,11 @@ class State(BaseModel, Base):
     else:
         name = ''
 
+    def __init__(self, *args, **kwargs):
+        """initializes state"""
+        super().__init__(*args, **kwargs)
+
+    if storage_mode != "db":
         @property
         def cities(self):
             '''
@@ -30,8 +35,8 @@ class State(BaseModel, Base):
             all_cities = storage.all(City)
             cities_list = []
 
-            for _, v in all_cities.items():
-                if v.state_id == self.id:
-                    cities_list.append(v)
+            for city in all_cities.items():
+                if city.state_id == self.id:
+                    cities_list.append(city)
 
             return cities_list
