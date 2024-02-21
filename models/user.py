@@ -14,10 +14,10 @@ class User(BaseModel, Base):
         password = Column(String(128), nullable=False)
         first_name = Column(String(128), nullable=True)
         last_name = Column(String(128), nullable=True)
-        places = relationship('Place', backref='user',
-                              cascade='all, delete, delete-orphan')
-        reviews = relationship('Review', backref='user',
-                               cascade='all, delete, delete-orphan')
+        # would not run with it in. This line was implemented in Task 8
+        places = relationship('Place', backref='user', cascade='delete')
+        # Below line is commented out for caution and was added in Task 9
+        reviews = relationship('Review', backref='user', cascade='delete')
     else:
         email = ""
         password = ""
