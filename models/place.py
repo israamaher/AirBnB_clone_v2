@@ -1,14 +1,16 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String, ForeignKey, Integer, Float, Table
+from models import storage_mode
+from sqlalchemy import Column, String, Integer, Float, ForeignKey
+from sqlalchemy.sql.schema import Table
 from sqlalchemy.orm import relationship
-import os
-import models
-from models import storage
+from models.amenity import Amenity
+from models.review import Review
 
 
-if models.storage_mode == 'db':
+
+if storage_mode == 'db':
     place_amenity = Table('place_amenity', Base.metadata,
                           Column('place_id', String(60),
                                  ForeignKey('places.id'),
@@ -23,8 +25,8 @@ if models.storage_mode == 'db':
 
 class Place(BaseModel, Base):
     """ A place to stay """
-    if models.storage_mode == "db":
-        __tablename__ = "places"
+    __tablename__ = "places"
+    if storage_mode == "db":
         city_id = Column(
             'city_id', String(60), ForeignKey('cities.id'), nullable=False)
         user_id = Column(
@@ -40,6 +42,8 @@ class Place(BaseModel, Base):
             "price_by_night", Integer(), nullable=False, default=0)
         latitude = Column("latitude", Float())
         longitude = Column("longitude", Float())
+        amenities = relationship('Amenity', secondary=place_amenity,
+                                 viewonly=False, backref='place_amenities')
     else:
         city_id = ""
         user_id = ""
@@ -56,7 +60,8 @@ class Place(BaseModel, Base):
         @property
         def reviews(self):
             ''' get a list all reviews'''
-            all_reviews = storage.all(models.Review)
+            from models import storage
+            all_reviews = storage.all(Review)
             list_reviews = []
             for i in all_reviews.values():
                 if i.place_id == self.id:
@@ -66,17 +71,18 @@ class Place(BaseModel, Base):
         @property
         def amenities(self):
             ''' get list amenity'''
-            all_amenities = storage.all(models.Amenity)
+            from models import storage
+            all_amenities = storage.all(Amenity)
             list_amen = []
-            for a in all_amenities.values():
-                if a.id in self.amenity_ids:
-                    list_amen.append(a)
+            for amen in all_amenities.values():
+                if amen.id in self.amenity_ids:
+                    list_amen.append(amen)
             return list_amen
 
         @amenities.setter
         def amenities(self, obj):
             ''' add id to attr '''
             if obj is not None:
-                if isinstance(obj, models.Amenity):
+                if isinstance(obj, Amenity):
                     if obj.id not in self.amenity_ids:
                         self.amenity_ids.append(obj.id)

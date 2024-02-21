@@ -18,12 +18,15 @@ class TestConsile(unittest.TestCase):
         """test create command"""
 
         with patch('sys.stdout', new=StringIO()) as f:
-            self.assertEqual("** class doesn't exist **\n", f.getvalue())
+            self.assertEqual(
+                "** class doesn't exist **\n", f.getvalue())
         with patch('sys.stdout', new=StringIO()) as f:
-            self.consol.onecmd('create User email="amira@.com" password="123456"')
+            self.consol.onecmd(
+                'create User email="amira@.com" password="123456"')
         with patch('sys.stdout', new=StringIO()) as f:
             self.consol.onecmd("all User")
-        with patch('builtins.input', return_value="create User name='amira' age=25") as mock_input:
+        with patch(
+                'builtins.input', return_value="create User name='amira' age=25") as mock_input:
             self.console.onecmd("create User name='amira' age=25")
         with patch('sys.stdout', new=StringIO()) as f:
             self.consol.onecmd("create")
