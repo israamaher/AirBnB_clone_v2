@@ -10,19 +10,13 @@ from models import storage_mode
 class State(BaseModel, Base):
     """ State class """
     __tablename__ = 'states'
+
+    name = Column(String(128), nullable=False)
     if storage_mode == 'db':
-        name = Column(String(128), nullable=False)
-        cities = relationship("City", backref="state",
-                              cascade='all, delete, delete-orphan')
+            cities = relationship("City", backref="state",
+                              cascade="all, delete")
 
     else:
-        name = ''
-
-    def __init__(self, *args, **kwargs):
-        """initializes state"""
-        super().__init__(*args, **kwargs)
-
-    if storage_mode != "db":
         @property
         def cities(self):
             '''
