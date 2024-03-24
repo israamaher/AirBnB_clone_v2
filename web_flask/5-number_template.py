@@ -7,8 +7,10 @@ Routes:
     /hbnb: Displays 'HBNB'.
     /c/<text>: Displays 'C <text>'
     /python/<text>: Displays 'Python <text>'
+    /number/<n>: Displays 'Python <text>'
+    /number_template/<n>: Renders an html template
 """
-from flask import Flask
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
@@ -36,6 +38,18 @@ def c_hbnb(text: str):
 def python_hbnb(text="is cool"):
     """handle requests for route: python with query param: text"""
     return "Python {}".format(text.replace("_", " "))
+
+
+@app.route("/number/<int:n>", strict_slashes=False)
+def number_hbnb(n):
+    """handle requests for route: number with query param: n"""
+    return "{} is a number".format(n)
+
+
+@app.route("/number_template/<int:n>", strict_slashes=False)
+def number_hbnb_template(n):
+    """handle requests for route: number with query param: n"""
+    return render_template("5-number.html", n=n)
 
 
 if __name__ == "__main__":
